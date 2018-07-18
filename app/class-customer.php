@@ -17,6 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+/**
+ * Class Customer
+ *
+ * @since 1.0.0
+ */
 class Customer extends WC_Customer {
 
 	/**
@@ -34,12 +39,12 @@ class Customer extends WC_Customer {
 				'customer_id' => $this->get_id(),
 				'return'      => 'ids',
 				/**
-				* Filter the order status that determines if an order is unshipped.
-				*
-				* @since 1.0.0
-				*
-				* @param string $status Order status.
-				*/
+				 * Filter the order status that determines if an order is unshipped.
+				 *
+				 * @since 1.0.0
+				 *
+				 * @param string $status Order status.
+				 */
 				'status'      => apply_filters( 'wc_combined_shipping_unshipped_order_status', 'processing' ),
 			]
 		);
