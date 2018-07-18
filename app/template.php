@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param array $rates Shipping package rates.
  * @return array
  */
-function wc_combined_shipping_package_rates( $rates ) {
+function wc_combined_shipping_package_rates( $rates, $package ) {
 	// Must be logged in.
 	if ( ! is_user_logged_in() ) {
 		return $rates;
@@ -40,8 +40,17 @@ function wc_combined_shipping_package_rates( $rates ) {
 			continue;
 		}
 
-		// Remove free shipping if no open order.
-		if ( ! $unshipped ) {
+		/**
+		 * Filter if free shipping should be offered at all.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param bool $sould True.
+		 */
+		$has_free = apply_filters( 'wc_combined_shipping_maybe_has_free_shipping', true, $rates, $package );
+
+		// Remove free shipping if no open order or explicitely set.
+		if ( ! $unshipped || ! $has_free ) {
 			unset( $rates[ $method_id ] );
 
 			return $rates;
@@ -70,4 +79,4 @@ function wc_combined_shipping_package_rates( $rates ) {
 
 	return $rates;
 }
-add_filter( 'woocommerce_package_rates', 'wc_combined_shipping_package_rates' );
+add_filter( 'woocommerce_package_rates', 'wc_combined_shipping_package_rates', 10, 2 );
