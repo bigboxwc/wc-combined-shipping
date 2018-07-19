@@ -1,12 +1,12 @@
-# Plugin
+# Combined Shipping for WooCommerce
 
-WordPress plugin base.
+Allow customers to combine shipping for a new order with an existing unshipped order.
 
 ## Install
 
 ```
-$ git clone git@github.com:bigboxwc/wp-plugin wp-plugin && cd wp-plugin
-$ npm run setup-theme
+$ git clone git@github.com:bigboxwc/wc-combined-shipping wc-combined-shipping && cd wc-combined-shipping
+$ npm run setup-plugin
 ```
 
 ## Develop
