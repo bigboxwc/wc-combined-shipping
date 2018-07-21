@@ -10,23 +10,8 @@ PACKAGE_NAME="wc-combined-shipping"
 PACKAGE_VERSION=$(get_package_version_number)
 PACKAGE_VERSION_PLACEHOLDER="WC_COMBINED_SHIPPING_VERSION"
 
-# Make sure there are no changes in the working tree.  Release builds should be
-# traceable to a particular commit and reliably reproducible.
-check_for_clean_cwd
-
-# Do a dry run of the repository reset. Prompting the user for a list of all
-# files that will be removed should prevent them from losing important files!
-reset_cwd
-
-# Change to the expected directory.
-go_to_root
-
-# Run the build
-status_message "Installing dependencies..."
-composer install
-
-status_message "Generating .pot file..."
-wp i18n make-pot . resources/languages/$PACKAGE_NAME.pot --domain=$PACKAGE_NAME
+# Setup.
+source "$(dirname "$0")/setup-plugin.sh"
 
 # Update version in files.
 status_message "Replacing version number..."

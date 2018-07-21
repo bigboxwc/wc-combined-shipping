@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Ensure we have access to wp-bin
+git submodule update --recursive
+
 # Include useful functions
 source "$(dirname "$0")/wp-bin/wp-bin.sh"
 
