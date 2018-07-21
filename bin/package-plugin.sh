@@ -34,7 +34,7 @@ sed -i "" "s|%${PACKAGE_VERSION_PLACEHOLDE}%|${PACKAGE_VERSION}|g" $PACKAGE_NAME
 
 # Generate the theme zip file
 status_message "Creating archive..."
-zip -r $PACKAAGE_NAME.zip \
+zip -r $PACKAGE_NAME.zip \
 	wc-combined-shipping.php \
 	app \
 	bootstrap \
@@ -50,4 +50,4 @@ rezip_with_version $PACKAGE_NAME $PACKAGE_VERSION
 # Reset generated files.
 git reset head --hard
 
-success_message "📦  Version $PACKAGE_VERSION build complete."
+success_message "📦  Version ${PACKAGE_VERSION} build complete."
