@@ -30,7 +30,7 @@ wp i18n make-pot . resources/languages/$PACKAGE_NAME.pot --domain=$PACKAGE_NAME
 
 # Update version in files.
 status_message "Replacing version number..."
-sed -i "" "s|%${PACKAGE_VERSION_PLACEHOLDE}%|${PACKAGE_VERSION}|g" $PACKAGE_NAME.php
+sed -i "" "s|%${PACKAGE_VERSION_PLACEHOLDER}%|${PACKAGE_VERSION}|g" $PACKAGE_NAME.php
 
 # Generate the theme zip file
 status_message "Creating archive..."
