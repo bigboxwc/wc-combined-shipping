@@ -1,24 +1,25 @@
 #!/bin/bash
 
 # Include useful functions
-. "$(dirname "$0")/wp-bin/includes.sh"
+source "$(dirname "$0")/wp-bin/includes.sh"
 
 # Exit if any command fails
 set -e
 
-PACKAGE_NAME = "wc-combined-shipping"
-PACKAGE_VERSION = $(get_package_version_number)
+PACKAGE_NAME="wc-combined-shipping"
+PACKAGE_VERSION=$(get_package_version_number)
+PACKAGE_VERSION_PLACEHOLDER="WC_COMBINED_SHIPPING_VERSION"
 
 # Make sure there are no changes in the working tree.  Release builds should be
 # traceable to a particular commit and reliably reproducible.
-check_for_clean_cwd()
+check_for_clean_cwd
 
 # Do a dry run of the repository reset. Prompting the user for a list of all
 # files that will be removed should prevent them from losing important files!
-reset_cwd()
+reset_cwd
 
 # Change to the expected directory.
-go_to_root()
+go_to_root
 
 # Run the build
 status_message "Installing dependencies..."
@@ -29,7 +30,7 @@ wp i18n make-pot . resources/languages/$PACKAGE_NAME.pot --domain=$PACKAGE_NAME
 
 # Update version in files.
 status_message "Replacing version number..."
-sed -i "" "s|%WC_COMBINED_SHIPPING_VERSION%|${PACKAGE_VERSION}|g" $PACKAGE_NAME.php
+sed -i "" "s|%${PACKAGE_VERSION_PLACEHOLDE}%|${PACKAGE_VERSION}|g" $PACKAGE_NAME.php
 
 # Generate the theme zip file
 status_message "Creating archive..."
