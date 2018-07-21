@@ -26,13 +26,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function wc_combined_shipping_package_rates( $rates, $package ) {
-	// Must be logged in.
-	if ( ! is_user_logged_in() ) {
-		return $rates;
-	}
+	$unshipped = null;
 
-	$customer  = new BigBox\WC_Combined_Shipping\Customer( get_current_user_id() );
-	$unshipped = $customer->get_latest_unshipped_order();
+	// Only query if user is logged in.
+	if ( is_user_logged_in() ) {
+		$customer  = new BigBox\WC_Combined_Shipping\Customer( get_current_user_id() );
+		$unshipped = $customer->get_latest_unshipped_order();
+	}
 
 	// Modify label with a link to latest order.
 	foreach ( $rates as $method_id => $rate ) {
@@ -50,7 +50,7 @@ function wc_combined_shipping_package_rates( $rates, $package ) {
 		$has_free = apply_filters( 'wc_combined_shipping_maybe_has_free_shipping', true, $rates, $package );
 
 		// Remove free shipping if no open order or explicitely set.
-		if ( ! $unshipped || ! $has_free ) {
+		if ( ! $unshipped || ! $has_free || ! is_user_logged_in() ) {
 			unset( $rates[ $method_id ] );
 
 			return $rates;
