@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Include useful functions
-source "$(dirname "$0")/wp-bin/includes.sh"
+source "$(dirname "$0")/wp-bin/wp-bin.sh"
 
 # Exit if any command fails
 set -e
