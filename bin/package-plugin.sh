@@ -1,79 +1,40 @@
 #!/bin/bash
 
 # Include useful functions
-. "$(dirname "$0")/includes.sh"
+source "$(dirname "$0")/wp-bin/wp-bin.sh"
 
 # Exit if any command fails
 set -e
 
-# Change to the expected directory
-cd "$(dirname "$0")"
-cd ..
-
-# Get version number from package.json
-PACKAGE_VERSION=$(cat package.json \
-  | grep version \
-  | head -1 \
-  | awk -F: '{ print $2 }' \
-  | sed 's/[",]//g' \
-  | tr -d '[[:space:]]')
+PACKAGE_NAME="wc-combined-shipping"
+PACKAGE_VERSION=$(get_package_version_number)
+PACKAGE_VERSION_PLACEHOLDER="WC_COMBINED_SHIPPING_VERSION"
 
 # Make sure there are no changes in the working tree.  Release builds should be
 # traceable to a particular commit and reliably reproducible.
-changed=
-if ! git diff --exit-code > /dev/null; then
-	changed="file(s) modified"
-elif ! git diff --cached --exit-code > /dev/null; then
-	changed="file(s) staged"
-fi
-if [ ! -z "$changed" ]; then
-	git status
-	echo "ERROR: Cannot build theme zip with dirty working tree."
-	echo "       Commit your changes and try again."
-	exit 1
-fi
-
-branch="$(git rev-parse --abbrev-ref HEAD)"
-if [ "$branch" != 'master' ]; then
-	echo "WARNING: You should probably be running this script against the"
-	echo "         'master' branch (current: '$branch')"
-	echo
-	sleep 2
-fi
+check_for_clean_cwd
 
 # Do a dry run of the repository reset. Prompting the user for a list of all
 # files that will be removed should prevent them from losing important files!
-status "Resetting the repository to pristine condition."
-git clean -xdf --dry-run
-warning "About to delete everything above! Is this okay?"
-echo -n "[Y]es/[N]o: "
-read answer
-if [ "$answer" != "${answer#[Yy]}" ]; then
-	# Remove ignored files to reset repository to pristine condition. Previous
-	# test ensures that changed files abort the wc-combined-shipping build.
-	status "Cleaning working directory..."
-	git clean -xdf
-else
-	error "Aborting."
-	exit 1
-fi
+reset_cwd
+
+# Change to the expected directory.
+go_to_root
 
 # Run the build
-status "Installing dependencies..."
+status_message "Installing dependencies..."
 composer install
 
-status "Generating .pot file..."
-wp i18n make-pot . resources/languages/wc-combined-shipping.pot --domain=wc-combined-shipping
+status_message "Generating .pot file..."
+wp i18n make-pot . resources/languages/$PACKAGE_NAME.pot --domain=$PACKAGE_NAME
 
 # Update version in files.
-sed -i "" "s|%WC_COMBINED_SHIPPING_VERSION%|${PACKAGE_VERSION}|g" wc-combined-shipping.php
-
-# Remove any existing zip file
-rm -f wc-combined-shipping*.zip
+status_message "Replacing version number..."
+sed -i "" "s|%${PACKAGE_VERSION_PLACEHOLDER}%|${PACKAGE_VERSION}|g" $PACKAGE_NAME.php
 
 # Generate the theme zip file
-status "Creating archive..."
-zip -r wc-combined-shipping.zip \
+status_message "Creating archive..."
+zip -r $PACKAGE_NAME.zip \
 	wc-combined-shipping.php \
 	app \
 	bootstrap \
@@ -84,10 +45,9 @@ zip -r wc-combined-shipping.zip \
 	-x *.git*
 
 # Rename and cleanup.
-unzip wc-combined-shipping.zip -d wc-combined-shipping && zip -r "wc-combined-shipping-$PACKAGE_VERSION.zip" wc-combined-shipping
-rm -rf wc-combined-shipping && rm -f wc-combined-shipping.zip
+rezip_with_version $PACKAGE_NAME $PACKAGE_VERSION
 
 # Reset generated files.
 git reset head --hard
 
-success "📦  Version $PACKAGE_VERSION build complete."
+success_message "📦  Version ${PACKAGE_VERSION} build complete."
