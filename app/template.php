@@ -47,10 +47,10 @@ function wc_combined_shipping_package_rates( $rates, $package ) {
 		 *
 		 * @param bool $sould True.
 		 */
-		$has_free = apply_filters( 'wc_combined_shipping_maybe_has_free_shipping', true, $rates, $package );
+		$has_free = apply_filters( 'wc_combined_shipping_maybe_has_free_shipping', $unshipped, $rates, $package );
 
 		// Remove free shipping if no open order or explicitely set.
-		if ( ! $unshipped || ! $has_free || ! is_user_logged_in() ) {
+		if ( ! $has_free || ! is_user_logged_in() ) {
 			unset( $rates[ $method_id ] );
 
 			return $rates;
