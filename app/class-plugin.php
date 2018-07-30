@@ -43,11 +43,11 @@ final class Plugin implements Registerable {
 	 */
 	public function load_helpers() {
 		$helpers = [
-			'template',
+			'functions.php',
 		];
 
 		foreach ( $helpers as $file ) {
-			require_once trailingslashit( WC_COMBINED_SHIPPING_PATH ) . trailingslashit( 'app' ) . $file . '.php';
+			require_once trailingslashit( WC_COMBINED_SHIPPING_PATH ) . trailingslashit( 'app' ) . $file;
 		}
 	}
 

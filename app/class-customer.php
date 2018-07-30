@@ -31,23 +31,50 @@ class Customer extends WC_Customer {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param array $args wc_get_orders() Arguments.
 	 * @return array
 	 */
-	public function get_unshipped_orders() {
-		return wc_get_orders(
-			[
-				'customer_id' => $this->get_id(),
-				'return'      => 'ids',
-				/**
-				 * Filter the order status that determines if an order is unshipped.
-				 *
-				 * @since 1.0.0
-				 *
-				 * @param string $status Order status.
-				 */
-				'status'      => apply_filters( 'wc_combined_shipping_unshipped_order_status', 'processing' ),
-			]
-		);
+	public function get_unshipped_orders( $args = [] ) {
+		/**
+		 * Filter the order status that determines if an order is unshipped.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $status Order status.
+		 */
+		$unshipped_status = apply_filters( 'wc_combined_shipping_unshipped_order_status', 'processing' );
+
+		$defaults = [
+			'customer_id' => $this->get_id(),
+			'return'      => 'ids',
+			'status'      => $unshipped_status,
+			'orderby'     => 'ID',
+			'order'       => 'DESC',
+		];
+
+		$args = wp_parse_args( $args, $defaults );
+
+		return wc_get_orders( $args );
+	}
+
+	/**
+	 * Return the most second most recent unshipped order.
+	 *
+	 * Used to get the previous order (since the current order is now technically unshipped).
+	 *
+	 * @return null|WC_Order Order object if found.
+	 */
+	public function get_previously_unshipped_order() {
+		$orders = $this->get_unshipped_orders( [
+			'number' => 1,
+			'offset' => 1,
+		] );
+
+		if ( empty( $orders ) ) {
+			return null;
+		}
+
+		return wc_get_order( current( $orders ) );
 	}
 
 	/**
@@ -56,13 +83,15 @@ class Customer extends WC_Customer {
 	 * @return null|WC_Order Order object if found.
 	 */
 	public function get_latest_unshipped_order() {
-		$orders = $this->get_unshipped_orders();
+		$orders = $this->get_unshipped_orders( [
+			'number' => 1,
+		] );
 
 		if ( empty( $orders ) ) {
 			return null;
 		}
 
-		return wc_get_order( array_pop( $orders ) );
+		return wc_get_order( current( $orders ) );
 	}
 
 }
