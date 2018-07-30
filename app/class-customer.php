@@ -65,10 +65,12 @@ class Customer extends WC_Customer {
 	 * @return null|WC_Order Order object if found.
 	 */
 	public function get_previously_unshipped_order() {
-		$orders = $this->get_unshipped_orders( [
-			'number' => 1,
-			'offset' => 1,
-		] );
+		$orders = $this->get_unshipped_orders(
+			[
+				'number' => 1,
+				'offset' => 1,
+			]
+		);
 
 		if ( empty( $orders ) ) {
 			return null;
@@ -83,9 +85,11 @@ class Customer extends WC_Customer {
 	 * @return null|WC_Order Order object if found.
 	 */
 	public function get_latest_unshipped_order() {
-		$orders = $this->get_unshipped_orders( [
-			'number' => 1,
-		] );
+		$orders = $this->get_unshipped_orders(
+			[
+				'number' => 1,
+			]
+		);
 
 		if ( empty( $orders ) ) {
 			return null;

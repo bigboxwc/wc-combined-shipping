@@ -128,7 +128,15 @@ function wc_combined_shipping_add_order_note( $order_id ) {
 	$note = sprintf(
 		/* translators: %1$s do not translate, %2$s order ID , %3$s do not translate. */
 		__( 'Combine with order %1$s#%2$s%3$s and ship for free.', 'wc-combined-shipping' ),
-		'<a href="' . esc_url( add_query_arg( [ 'action' => 'edit', 'post' => $unshipped->get_id() ], admin_url( 'post.php' ) ) ) . '">',
+		'<a href="' . esc_url(
+			add_query_arg(
+				[
+					'action' => 'edit',
+					'post'   => $unshipped->get_id(),
+				],
+				admin_url( 'post.php' )
+			)
+		) . '">',
 		$unshipped->get_id(),
 		'</a>'
 	);

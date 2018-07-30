@@ -16,7 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 add_action(
-	'plugins_loaded', function() {
+	'plugins_loaded',
+	function() {
 		return PluginFactory::create()->register();
 	}
 );
