@@ -3,7 +3,7 @@
 	"title": "Combined Shipping for WooCommerce",
 	"author": "Spencer Finnell",
 	"description": "Allow customers to combine shipping for a new order with an existing unshipped order.",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"license": "GPL-2.0-or-later",
 	"scripts": {
 		"package-plugin": "./bin/package-plugin.sh",
