@@ -67,7 +67,7 @@ function wc_combined_shipping_package_rates( $rates, $package ) {
 			'wc_combined_shipping_free_shipping_label',
 			sprintf(
 				/* translators: %1$s order ID, %2$s order date. */
-				__( 'Ship with order #%1$s (%2$s) for free', 'wc-combined-shipping' ),
+				__( 'Combine with order #%1$s (%2$s) and ship for free', 'wc-combined-shipping' ),
 				$unshipped->get_id(),
 				$unshipped->get_date_created()->date_i18n( get_option( 'date_format' ) )
 			)
