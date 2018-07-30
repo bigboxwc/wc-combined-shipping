@@ -24,7 +24,7 @@ if ( version_compare( PHP_VERSION, WC_COMBINED_SHIPPING_PHP_VERSION, '<' ) ) {
 		return;
 	}
 
-	wp_die( wc_combined_shipping_get_php_notice_text() );
+	wp_die( wc_combined_shipping_get_php_notice_text() ); // WPCS: XSS okay.
 }
 
 /**
@@ -33,7 +33,7 @@ if ( version_compare( PHP_VERSION, WC_COMBINED_SHIPPING_PHP_VERSION, '<' ) ) {
  * @since 1.10.0
  */
 function wc_combined_shipping_php_admin_notices() {
-	echo '<div class="notice notice-error"><p>' . wc_combined_shipping_get_php_notice_text() . '</p></div>';
+	echo '<div class="notice notice-error"><p>' . wc_combined_shipping_get_php_notice_text() . '</p></div>'; // WPCS: XSS okay.
 }
 
 /**

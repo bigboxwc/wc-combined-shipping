@@ -22,7 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  *
- * @param array $rates Shipping package rates.
+ * @param array            $rates Shipping package rates.
+ * @param WC_Shipping_Rate $package WooCommerce shipping rate.
  * @return array
  */
 function wc_combined_shipping_package_rates( $rates, $package ) {
